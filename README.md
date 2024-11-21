@@ -6,8 +6,8 @@ Language used: Python
 
 ## Pre-requirement:
 
-You need to have **Ollama** installed https://ollama.com/download
-This project uses Llama 3.2 but feel free to change the model at will
+You need to have **Ollama** installed https://ollama.com/download.
+This project uses Llama 3.2 but feel free to change the model at will.
 
 ## How to run:
 
