@@ -1,2 +1,2 @@
-# Prolog_Exercices
-Learning AI using Prolog Language
+# AI project
+TODO
