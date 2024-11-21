@@ -2,10 +2,19 @@
 
 Language used: Python
 
-**Step 1:**
+## How to run:
 
-- Pull PDF document from S3 Bucket with boto3
+**Init Project :**
 
 ```bash
-pip install boto3
+make init
+```
+
+Upload pdf file from AWS S3 Bucket using boto3 library and store the content in text.text
+
+_Optional:_
+You can see the content of text.txt using
+
+```bash
+cat text.txt
 ```
