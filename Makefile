@@ -1,4 +1,4 @@
-.PHONY: all install start
+.PHONY: all install start clean
 
 all: install start
 
@@ -16,3 +16,6 @@ install:
 start:
 	. .venv/bin/activate && \
 	python3 localrag.py
+
+clean:
+	rm -rf .venv text.txt

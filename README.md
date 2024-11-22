@@ -29,3 +29,17 @@ cat text.txt
 ```bash
 make start
 ```
+
+Starts the chatbot where you can write your questions about the uploaded file from S3.
+In this example, we are using a PDF file about coffee.
+
+> [!IMPORTANT]
+> Queries about other subject might return an inacurrate answer
+
+**Clean the temp files**
+
+```bash
+make clean
+```
+
+Clean the text.txt
