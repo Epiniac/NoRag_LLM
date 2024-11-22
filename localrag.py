@@ -17,7 +17,7 @@ RESET_COLOR = '\033[0m'
 logging.basicConfig(level=logging.INFO)
 
 def open_file(filepath: str) -> str:
-    """Open a file and return its contents as a string."""
+    """Open a file and return its contents as a string  ."""
     try:
         with open(filepath, 'r', encoding='utf-8') as infile:
             return infile.read()
@@ -31,13 +31,16 @@ def get_relevant_context(rewritten_input: str, vault_embeddings: torch.Tensor, v
         return []
     
     input_embedding = ollama.embeddings(model='mxbai-embed-large', prompt=rewritten_input)["embedding"]
+    if not input_embedding or len(input_embedding) == 0:
+        logging.error("Generated input embedding is empty.")
+        return []
     cos_scores = torch.cosine_similarity(torch.tensor(input_embedding).unsqueeze(0), vault_embeddings)
     top_k = min(top_k, len(cos_scores))
     top_indices = torch.topk(cos_scores, k=top_k)[1].tolist()
     
     return [vault_content[idx].strip() for idx in top_indices]
 
-def rewrite_query(user_input_json: str, conversation_history: list, ollama_model: str) -> str:
+def rewrite_query(user_input_json: str, conversation_history: list, ollama_model: str, client) -> str:
     """Rewrite the user's query using conversation history."""
     user_input = json.loads(user_input_json)["Query"]
     context = "\n".join([f"{msg['role']}: {msg['content']}" for msg in conversation_history[-2:]])
@@ -56,7 +59,7 @@ def rewrite_query(user_input_json: str, conversation_history: list, ollama_model
     
     Original query: [{user_input}]
     
-    Rewritten query: 
+    Rewritten query: [{user_input_json}]
     """
     
     response = client.chat.completions.create(
@@ -76,7 +79,7 @@ def ollama_chat(user_input: str, system_message: str, vault_embeddings: torch.Te
     rewritten_query = user_input
     if len(conversation_history) > 1:
         query_json = {"Query": user_input, "Rewritten Query": ""}
-        rewritten_query_json = rewrite_query(json.dumps(query_json), conversation_history, ollama_model)
+        rewritten_query_json = rewrite_query(json.dumps(query_json), conversation_history, ollama_model, client)
         rewritten_query_data = json.loads(rewritten_query_json)
         rewritten_query = rewritten_query_data["Rewritten Query"]
         logging.info(f"{PINK}Original Query: {user_input}{RESET_COLOR}")
