@@ -19,3 +19,5 @@ start:
 
 clean:
 	rm -rf .venv text.txt
+
+
